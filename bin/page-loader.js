@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-
+// @ts-check
 import { Command } from 'commander';
+import loadPage from '../src/index.js';
 
 const command = new Command();
 
@@ -10,7 +11,6 @@ command
   .argument('<url>', 'webpage url to load')
   .option('-o, --output [dir]', 'output dir', process.cwd())
   .action((url, { output }) => {
-    console.log(url);
-    console.log(output);
+    loadPage(url, output);
   })
   .parse();
