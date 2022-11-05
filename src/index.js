@@ -2,12 +2,37 @@
 import axios from 'axios';
 import fs from 'fs/promises';
 import path from 'path';
+import * as cheerio from 'cheerio';
 
 const dashifySymbols = (name) => `${name.replace(/https?:\/\//, '').replace(/[^\w\d]/ig, '-')}`;
 
-export default (url, outdir) => axios.get(url)
+export default (address, outdir) => axios.get(address)
   .then(({ data }) => {
-    const fileName = `${dashifySymbols(url)}.html`;
+    const url = new URL(address);
+    const prefix = dashifySymbols(url.href);
+    const fileName = `${prefix}.html`;
     const filePath = path.join(outdir, fileName);
-    return fs.writeFile(filePath, data);
+    const $ = cheerio.load(data);
+    const images = $('img');
+    if (images.length) {
+      const filesDirName = `${prefix}_files`;
+      const filesDirPath = path.join(outdir, filesDirName);
+      return fs.mkdir(filesDirPath)
+        .then(() => {
+          const promises = images.map((_, img) => {
+            const imgSrc = $(img).attr('src');
+            const parsedPath = path.parse(imgSrc);
+            const dashedBase = dashifySymbols(parsedPath.dir).slice(1);
+            const dashedOrigin = dashifySymbols(url.origin);
+            const imgName = `${dashedOrigin}-${dashedBase}-${parsedPath.base}`;
+            const imgPath = path.join(filesDirPath, imgName);
+            return axios.get(`${url.origin}${imgSrc}`, { responseType: 'stream' })
+              .then((response) => fs.writeFile(imgPath, response.data))
+              .then(() => $(img).attr('src', path.join(filesDirName, imgName)))
+              .catch(console.error);
+          });
+          return Promise.all(promises);
+        })
+        .then(() => fs.writeFile(filePath, $.html()));
+    }
   });

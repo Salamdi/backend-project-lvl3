@@ -24,6 +24,7 @@
   "homepage": "https://github.com/Salamdi/backend-project-lvl3#readme",
   "dependencies": {
     "axios": "^0.27.2",
+    "cheerio": "^1.0.0-rc.12",
     "commander": "^9.4.0"
   },
   "devDependencies": {
