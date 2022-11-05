@@ -5,4 +5,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/40e5f653cde8e62abe2e/test_coverage)](https://codeclimate.com/github/Salamdi/backend-project-lvl3/test_coverage)
 
 ### Usage
-[![asciicast](https://asciinema.org/a/XLGWvuKTBBE0fnWNhXK9Wdg0n.svg)](https://asciinema.org/a/XLGWvuKTBBE0fnWNhXK9Wdg0n)
+[![asciicast](https://asciinema.org/a/nkHrsyAEqohyKCJ4JBmpP8I80.svg)](https://asciinema.org/a/nkHrsyAEqohyKCJ4JBmpP8I80)

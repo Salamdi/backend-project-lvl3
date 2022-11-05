@@ -9,7 +9,7 @@ const dashifySymbols = (name) => `${name.replace(/https?:\/\//, '').replace(/[^\
 export default (address, outdir) => axios.get(address)
   .then(({ data }) => {
     const url = new URL(address);
-    const prefix = dashifySymbols(url.href);
+    const prefix = dashifySymbols(url.href.slice(0, -1));
     const fileName = `${prefix}.html`;
     const filePath = path.join(outdir, fileName);
     const $ = cheerio.load(data);
@@ -33,6 +33,9 @@ export default (address, outdir) => axios.get(address)
           });
           return Promise.all(promises);
         })
-        .then(() => fs.writeFile(filePath, $.html()));
+        .then(() => fs.writeFile(filePath, $.html()))
+        .then(() => console.log(
+          `Page was successfully downloaded into ${filePath}`
+        ));
     }
   });
