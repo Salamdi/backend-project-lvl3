@@ -17,7 +17,7 @@ export default (address, outdir) => axios.get(address)
     if (images.length) {
       const filesDirName = `${prefix}_files`;
       const filesDirPath = path.join(outdir, filesDirName);
-      return fs.mkdir(filesDirPath)
+      fs.mkdir(filesDirPath)
         .then(() => {
           const promises = images.map((_, img) => {
             const imgSrc = $(img).attr('src');
@@ -35,7 +35,7 @@ export default (address, outdir) => axios.get(address)
         })
         .then(() => fs.writeFile(filePath, $.html()))
         .then(() => console.log(
-          `Page was successfully downloaded into ${filePath}`
+          `Page was successfully downloaded into ${filePath}`,
         ));
     }
   });
